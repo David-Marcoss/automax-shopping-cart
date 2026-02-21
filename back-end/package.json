@@ -8,7 +8,7 @@
     "dev": "tsx watch src/server.ts",
     "prisma:generate": "prisma generate",
     "migrate": "prisma migrate deploy",
-    "migrate:dev": "prisma migrate dev",
+    "migrate:dev": "prisma migrate dev && prisma generate",
     "migrate:reset": "prisma migrate reset --force"
   },
   "keywords": [],
@@ -18,12 +18,14 @@
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.4.1",
     "@prisma/client": "^7.4.1",
+    "axios": "^1.13.5",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "yup": "^1.7.1"
   },
   "devDependencies": {
+    "@types/axios": "^0.9.36",
     "@types/better-sqlite3": "^7.6.13",
     "@types/cors": "^2.8.19",
     "@types/dotenv": "^6.1.1",
