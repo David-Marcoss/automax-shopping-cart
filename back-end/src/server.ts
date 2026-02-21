@@ -1,7 +1,7 @@
 import express from "express";
 import { prisma } from "./database/prisma";
 
-const app = express();
+export const app = express();
 
 app.use(express.json());
 
