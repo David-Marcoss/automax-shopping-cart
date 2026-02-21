@@ -1,4 +1,5 @@
 import { CartsService } from "../carts";
+import { ProductsService } from "../products";
 import { CartProductsRepository } from "./cartProducts.repository";
 import {
   ICartProduct,
@@ -12,6 +13,9 @@ export class CartProductsService {
   async createOrUpdate(data: ICreateCartProduct): Promise<ICartProduct> {
     // valida se o cart existe
     await CartsService.getById(data.cartId);
+
+    // valida se o Product existe
+    await ProductsService.getById(data.productId);
 
     return this.repository.upsert(data);
   }
@@ -38,6 +42,11 @@ export class CartProductsService {
     if (data.cartId) {
       // valida se o cart existe
       await CartsService.getById(data.cartId);
+    }
+
+    if (data.productId) {
+      // valida se o cart existe
+      await ProductsService.getById(data.productId);
     }
 
     const existing = await this.repository.getById(data.id);

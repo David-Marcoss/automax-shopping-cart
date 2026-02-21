@@ -6,6 +6,7 @@ import { ICreateCartProduct } from "./cartProducts.type";
 const bodyValidation: yup.Schema<ICreateCartProduct> = yup.object().shape({
   id: yup.number(),
   cartId: yup.number().required(),
+  productId: yup.number().required(),
   quantity: yup.number().min(1).required(),
 });
 

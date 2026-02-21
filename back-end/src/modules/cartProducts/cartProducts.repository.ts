@@ -19,11 +19,17 @@ export class CartProductsRepository {
   async getById(id: number): Promise<ICartProduct | null> {
     return prisma.cartProducts.findFirst({
       where: { id },
+      include: {
+        product: true,
+      },
     });
   }
 
   async getAll(): Promise<ICartProduct[]> {
     return prisma.cartProducts.findMany({
+      include: {
+        product: true,
+      },
       orderBy: {
         createdAt: "desc",
       },
