@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "./generated/prisma"
 }
 
 datasource db {
@@ -9,7 +9,7 @@ datasource db {
 
 model Carts {
   id                Int     @id @default(autoincrement())
-  userId            String
+  userId            Int
   date              DateTime
   products          CartProducts[]
   createdAt         DateTime @default(now())
