@@ -11,6 +11,16 @@ model Carts {
   id                Int     @id @default(autoincrement())
   userId            String
   date              DateTime
+  products          CartProducts[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model CartProducts {
+  id                Int     @id @default(autoincrement())
+  quantity          Int
+  cartId            Int
+  cart              Carts    @relation(fields: [cartId], references: [id])
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
