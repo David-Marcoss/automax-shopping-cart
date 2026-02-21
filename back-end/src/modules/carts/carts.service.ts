@@ -4,8 +4,8 @@ import { ICart, ICreateCart, IUpdateCart } from "./carts.type";
 export class CartsService {
   constructor(private repository: CartsRepository) {}
 
-  async create(data: ICreateCart): Promise<ICart> {
-    return this.repository.create(data);
+  async createOrUpdate(data: ICreateCart): Promise<ICart> {
+    return this.repository.upsert(data);
   }
 
   async getById(id: number): Promise<ICart> {
@@ -24,7 +24,7 @@ export class CartsService {
 
   async update(data: IUpdateCart): Promise<ICart> {
     if (!data.id) {
-      throw new Error("ID is required to update cart");
+      throw new Error("Required a valid ID to update cart");
     }
 
     const existingCart = await this.repository.getById(data.id);

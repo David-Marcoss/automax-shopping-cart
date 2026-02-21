@@ -3,22 +3,6 @@ import * as yup from "yup";
 import { validation } from "../../shared/middleware/Validation";
 import { ICreateCart } from "./carts.type";
 
-const ParamsIdValidation: yup.Schema<{ id: number }> = yup.object().shape({
-  id: yup
-    .number()
-    .transform((value, originalValue) =>
-      originalValue === "" ? undefined : Number(originalValue),
-    )
-    .typeError("Id must be a number")
-    .moreThan(0)
-    .required(),
-});
-
-// midleware validação params
-export const paramIdValidation = validation({
-  params: ParamsIdValidation,
-});
-
 const bodyValidation: yup.Schema<ICreateCart> = yup.object().shape({
   id: yup.number(),
   userId: yup.number().required(),
@@ -31,5 +15,5 @@ const bodyValidation: yup.Schema<ICreateCart> = yup.object().shape({
 
 // midleware validação dados do body
 export const createOrUpdateValidation = validation({
-  "body": bodyValidation,
+  body: bodyValidation,
 });

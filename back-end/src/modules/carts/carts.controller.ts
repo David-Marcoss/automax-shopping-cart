@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
 import { CartsService } from "./carts.service";
+import { ICreateCart } from "./carts.type";
 
 export class CartsController {
   constructor(private service: CartsService) {}
 
-  create = async (req: Request, res: Response) => {
+  create = async (req: Request<any, any, ICreateCart>, res: Response) => {
     try {
       const data = req.body;
 
-      const cart = await this.service.create(data);
+      const cart = await this.service.createOrUpdate(data);
 
       return res.status(201).json(cart);
     } catch (error: any) {
@@ -55,7 +56,7 @@ export class CartsController {
 
       return res.json(cart);
     } catch (error: any) {
-      return res.status(400).json({
+      return res.status(404).json({
         message: error.message,
       });
     }

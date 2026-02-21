@@ -12,11 +12,11 @@ export interface ICart {
 export interface ICreateCart {
   id?: number;
   userId: number;
-  date: Date;
+  date: string;
 }
 
 export interface IUpdateCart {
   id?: number;
   userId?: number;
-  date?: Date;
+  date?: string;
 }

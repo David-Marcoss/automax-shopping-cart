@@ -2,9 +2,18 @@ import { prisma } from "src/database/prisma";
 import { ICart, ICreateCart, IUpdateCart } from "./carts.type";
 
 export class CartsRepository {
-  async create(data: ICreateCart): Promise<ICart> {
+  async upsert(data: ICreateCart): Promise<ICart> {
+    const formatedData = {
+      ...data,
+      date: new Date(data.date),
+    };
+
+    if (data.id) {
+      return this.update(data);
+    }
+
     return prisma.carts.create({
-      data,
+      data: formatedData,
     });
   }
 
@@ -35,7 +44,10 @@ export class CartsRepository {
 
     return prisma.carts.update({
       where: { id: data.id },
-      data,
+      data: {
+        ...data,
+        date: data.date ? new Date(data.date) : undefined,
+      },
     });
   }
 
