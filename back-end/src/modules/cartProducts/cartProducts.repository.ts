@@ -7,14 +7,12 @@ import {
 
 export class CartProductsRepository {
   async upsert(data: ICreateCartProduct): Promise<ICartProduct> {
-    return prisma.cartProducts.upsert({
-      where: { id: data.id, cartId: data.cartId },
-      update: {
-        ...data,
-      },
-      create: {
-        ...data,
-      },
+    if (data.id) {
+      return this.update(data);
+    }
+
+    return prisma.cartProducts.create({
+      data: data,
     });
   }
 

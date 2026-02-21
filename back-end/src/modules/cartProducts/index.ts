@@ -1,7 +1,9 @@
-import { CartProductsRepository } from "./cartProducts.repository";
-import { CartProductsService } from "./cartProducts.service";
+import { CartProductsController as Controller } from "./cartProducts.controller";
+import { CartProductsRepository as Repository } from "./cartProducts.repository";
+import { CartProductsService as Service } from "./cartProducts.service";
 
-const cartProductsRepository = new CartProductsRepository();
-const cartProductsService = new CartProductsService(cartProductsRepository);
+const CartProductsRepository = new Repository();
+const CartProductsService = new Service(CartProductsRepository);
+const CartProductsController = new Controller(CartProductsService);
 
-export default { cartProductsRepository, cartProductsService };
+export { CartProductsRepository, CartProductsService, CartProductsController };

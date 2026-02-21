@@ -17,4 +17,4 @@ router.put(
 );
 router.delete("/:id", paramIdValidation, CartsController.delete);
 
-export { router as cartsRoutes };
+export { router as CartsRoutes };
