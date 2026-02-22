@@ -25,6 +25,18 @@ export class CartProductsRepository {
     });
   }
 
+  async getByCartIdAndProductId(
+    productId: number,
+    cartId: number,
+  ): Promise<ICartProduct | null> {
+    return prisma.cartProducts.findFirst({
+      where: { productId, cartId },
+      include: {
+        product: true,
+      },
+    });
+  }
+
   async getAll(): Promise<ICartProduct[]> {
     return prisma.cartProducts.findMany({
       include: {

@@ -9,7 +9,7 @@ export class ProductsController {
     try {
       const data = req.body;
 
-      const product = await this.service.createOrUpdate(data);
+      const product = await this.service.create(data);
 
       return res.status(201).json(product);
     } catch (error: any) {
@@ -24,6 +24,12 @@ export class ProductsController {
       const id = Number(req.params.id);
 
       const product = await this.service.getById(id);
+
+      if (!product) {
+        return res.status(404).json({
+          message: "Product not found",
+        });
+      }
 
       return res.json(product);
     } catch (error: any) {

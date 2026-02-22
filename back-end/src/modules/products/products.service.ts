@@ -4,18 +4,12 @@ import { IProduct, ICreateProduct, IUpdateProduct } from "./products.type";
 export class ProductsService {
   constructor(private repository: ProductsRepository) {}
 
-  async createOrUpdate(data: ICreateProduct): Promise<IProduct> {
-    return this.repository.upsert(data);
+  async create(data: ICreateProduct): Promise<IProduct> {
+    return this.repository.create(data);
   }
 
-  async getById(id: number): Promise<IProduct> {
-    const item = await this.repository.getById(id);
-
-    if (!item) {
-      throw new Error(" product not found");
-    }
-
-    return item;
+  async getById(id: number): Promise<IProduct | null> {
+    return await this.repository.getById(id);
   }
 
   async getAll(): Promise<IProduct[]> {

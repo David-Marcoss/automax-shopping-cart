@@ -25,6 +25,12 @@ export class CartsController {
 
       const cart = await this.service.getById(id);
 
+      if (!cart) {
+        return res.status(404).json({
+          message: "Cart not found",
+        });
+      }
+
       return res.json(cart);
     } catch (error: any) {
       return res.status(404).json({

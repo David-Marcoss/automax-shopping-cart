@@ -1,19 +1,28 @@
 import { CartsRepository } from "./carts.repository";
+
 import { ICart, ICreateCart, IUpdateCart } from "./carts.type";
 
 export class CartsService {
   constructor(private repository: CartsRepository) {}
 
-  async createOrUpdate(data: ICreateCart): Promise<ICart> {
-    return this.repository.upsert(data);
+  async create(data: ICreateCart): Promise<ICart | null> {
+    if (data.id) {
+      const extistingCart = await this.getById(data.id);
+
+      if (extistingCart) return null;
+    }
+
+    return this.repository.create(data);
   }
 
-  async getById(id: number): Promise<ICart> {
+  async getById(id: number): Promise<ICart | null> {
     const cart = await this.repository.getById(id);
 
-    if (!cart) {
-      throw new Error("Cart not found");
-    }
+    return cart;
+  }
+
+  async getByProductId(id: number): Promise<ICart | null> {
+    const cart = await this.repository.getById(id);
 
     return cart;
   }

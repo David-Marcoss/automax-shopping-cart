@@ -2,26 +2,22 @@ import { prisma } from "src/database/prisma";
 import { IProduct, ICreateProduct, IUpdateProduct } from "./products.type";
 
 export class ProductsRepository {
-  async upsert(data: ICreateProduct): Promise<IProduct> {
-    if (data.id) {
-      return this.update(data);
-    }
-
-    return prisma.products.create({
+  async create(data: ICreateProduct): Promise<IProduct> {
+    return await prisma.products.create({
       data: data,
     });
   }
 
   async getById(id: number): Promise<IProduct | null> {
-    return prisma.products.findFirst({
+    return await prisma.products.findFirst({
       where: { id },
     });
   }
 
   async getAll(): Promise<IProduct[]> {
-    return prisma.products.findMany({
+    return await prisma.products.findMany({
       orderBy: {
-        createdAt: "desc",
+        id: "asc",
       },
     });
   }
@@ -31,7 +27,7 @@ export class ProductsRepository {
       throw new Error("ID is required to update Product");
     }
 
-    return prisma.products.update({
+    return await prisma.products.update({
       where: { id: data.id },
       data,
     });

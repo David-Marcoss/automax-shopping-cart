@@ -27,11 +27,16 @@ export class CartProductsController {
       const id = Number(req.params.id);
 
       const cartProduct = await this.service.getById(id);
+      if (!cartProduct) {
+        return res.status(404).json({
+          message: "Cart Product not found",
+        });
+      }
 
       return res.json(cartProduct);
     } catch (error: any) {
-      return res.status(404).json({
-        message: error.message,
+      return res.status(500).json({
+        message: "Internal server error",
       });
     }
   };

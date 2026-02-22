@@ -20,12 +20,20 @@ export class CartProductsService {
     return this.repository.upsert(data);
   }
 
-  async getById(id: number): Promise<ICartProduct> {
+  async getById(id: number): Promise<ICartProduct | null> {
     const item = await this.repository.getById(id);
 
-    if (!item) {
-      throw new Error("Cart product not found");
-    }
+    return item;
+  }
+
+  async getByCartIdAndProductId(
+    productId: number,
+    cartId: number,
+  ): Promise<ICartProduct | null> {
+    const item = await this.repository.getByCartIdAndProductId(
+      cartId,
+      productId,
+    );
 
     return item;
   }
