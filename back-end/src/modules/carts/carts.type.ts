@@ -16,7 +16,6 @@ export interface ICreateCart {
 }
 
 export interface IUpdateCart {
-  id?: number;
   userId?: number;
   date?: string;
 }

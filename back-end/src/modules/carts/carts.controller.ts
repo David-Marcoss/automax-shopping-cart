@@ -9,7 +9,7 @@ export class CartsController {
     try {
       const data = req.body;
 
-      const cart = await this.service.createOrUpdate(data);
+      const cart = await this.service.create(data);
 
       return res.status(201).json(cart);
     } catch (error: any) {
