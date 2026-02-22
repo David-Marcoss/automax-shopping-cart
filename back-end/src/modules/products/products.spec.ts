@@ -15,8 +15,6 @@ describe("Products - Integration", () => {
 
     const response = await request(app).post("/products").send(data);
 
-    console.log(response.body);
-
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("id");
     expect(response.body.title).toBe(data.title);
