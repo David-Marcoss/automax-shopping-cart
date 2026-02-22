@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Loader2, ArrowLeft } from "lucide-react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Loader2, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import ProductCard from "./components/productCard";
+
 import type { ICart } from "@/shared/interfaces/carts/ICarts";
 import { CartService } from "@/shared/services/carts";
 import { useToast } from "@/shared/hooks/use-toast";
@@ -127,54 +129,7 @@ export default function CartPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <Card className="rounded-2xl shadow-sm hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6 grid md:grid-cols-4 gap-6">
-                    <div className="flex items-center justify-center">
-                      <img
-                        src={item.product!.image}
-                        alt={item.product!.title}
-                        className="h-32 object-contain"
-                      />
-                    </div>
-
-                    <div className="md:col-span-2 space-y-2">
-                      <h3 className="font-semibold text-base">
-                        {item.product!.title}
-                      </h3>
-                      <p className="text-muted-foreground text-sm line-clamp-3">
-                        {item.product!.description}
-                      </p>
-                      <Badge variant="outline">{item.product!.category}</Badge>
-                    </div>
-
-                    <div className="flex flex-col justify-between items-end">
-                      <div className="text-right">
-                        <p className="text-muted-foreground text-sm">Preço</p>
-                        <p className="font-semibold">
-                          R$ {item.product!.price.toFixed(2)}
-                        </p>
-                      </div>
-
-                      <Separator className="my-2" />
-
-                      <div className="text-right">
-                        <p className="text-muted-foreground text-sm">
-                          Quantidade
-                        </p>
-                        <p className="font-semibold">x{item.quantity}</p>
-                      </div>
-
-                      <div className="text-right mt-2">
-                        <p className="text-muted-foreground text-sm">
-                          Subtotal
-                        </p>
-                        <p className="font-bold">
-                          R$ {(item.product!.price * item.quantity).toFixed(2)}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <ProductCard cartProduct={item} />
               </motion.div>
             ))}
         </div>

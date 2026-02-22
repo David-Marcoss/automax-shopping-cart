@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, ShoppingCart } from "lucide-react";
@@ -9,6 +7,7 @@ import { motion } from "framer-motion";
 
 import type { ICart } from "@/shared/interfaces/carts/ICarts";
 import { CartService } from "@/shared/services/carts";
+import CartCard from "./components/cartCard";
 
 export default function DashboardPage() {
   const [carts, setCarts] = useState<ICart[]>([]);
@@ -69,46 +68,7 @@ export default function DashboardPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Card className="rounded-2xl shadow-md hover:shadow-xl transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="text-lg flex justify-between items-center">
-                      Carrinho #{cart.id}
-                      <Badge variant="secondary">
-                        {cart?.products?.length ?? 0} itens
-                      </Badge>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3 text-sm">
-                    <p>
-                      <span className="font-medium">Usuário:</span>{" "}
-                      {cart.userId}
-                    </p>
-                    <p>
-                      <span className="font-medium">Data:</span>{" "}
-                      {new Date(cart.date).toLocaleDateString()}
-                    </p>
-
-                    {cart.products && (
-                      <div className="space-y-1">
-                        {cart.products.slice(0, 3).map((product, index) => (
-                          <div
-                            key={index}
-                            className="flex justify-between text-muted-foreground"
-                          >
-                            <span>Produto #{product.productId}</span>
-                            <span>x{product.quantity}</span>
-                          </div>
-                        ))}
-
-                        {cart.products.length > 3 && (
-                          <p className="text-xs text-muted-foreground">
-                            + {cart.products.length - 3} outros itens...
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                <CartCard cart={cart} />
               </motion.div>
             ))}
           </div>
