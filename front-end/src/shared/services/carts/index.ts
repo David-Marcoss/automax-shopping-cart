@@ -4,10 +4,7 @@ import {
 } from "../axios-config/api-response";
 import { Api } from "../axios-config";
 
-import type {
-  IListResponse,
-  IResponse,
-} from "@/shared/interfaces/response/IResponse";
+import type { IResponse } from "@/shared/interfaces/response/IResponse";
 import type {
   ICreateCart,
   ICart,
@@ -17,7 +14,7 @@ import type {
 const route = "/carts";
 
 export type ICartResponse = IResponse<ICart>;
-export type ICartListResponse = IListResponse<ICart>;
+export type ICartListResponse = IResponse<ICart[]>;
 
 export const CartService = {
   create: async (data: ICreateCart): Promise<ICartResponse> => {

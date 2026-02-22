@@ -1,121 +1,117 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import type { IOltInfos } from "@/shared/interfaces/oltInfos";
-import { OltInfosService } from "@/shared/services/oltInfosService";
-import { OltInfosTable } from "./components/oltInfosTable";
-import { Card, CardContent } from "@/components/ui/card";
-import { OltInfosModal } from "./components/oltInfosModal";
-import type { IMetaPagination } from "@/shared/interfaces/response/IMetaPagination";
-import { SimplePagination } from "@/components/pagination/pagination";
-import { useSearchParams } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Loader2, ShoppingCart } from "lucide-react";
+import { motion } from "framer-motion";
+
+import type { ICart } from "@/shared/interfaces/carts/ICarts";
+import { CartService } from "@/shared/services/carts";
 
 export default function DashboardPage() {
-  const [oltInfos, setOltInfos] = useState<IOltInfos[]>([]);
-  const [metaPagination, setMetaPagination] = useState<IMetaPagination>();
-
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const search = useMemo(
-    () => searchParams.get("search") || "",
-    [searchParams]
-  );
-
-  const oltType = useMemo(
-    () => searchParams.get("oltType") || "",
-    [searchParams]
-  );
-
-  const state = useMemo(() => searchParams.get("state") || "", [searchParams]);
-
-  const page = useMemo(() => searchParams.get("page") || "1", [searchParams]);
-
-  const handleGetOltsData = useCallback(() => {
-    OltInfosService.findAll({ search, page, oltType, state }).then((result) => {
-      if (result.statusCode === 200 && result.data?.data) {
-        setOltInfos(result.data.data);
-        setMetaPagination(result.data.meta);
-      }
-    });
-  }, [page, search, oltType, state]);
+  const [carts, setCarts] = useState<ICart[]>([]);
+  const [filteredCarts, setFilteredCarts] = useState<ICart[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    handleGetOltsData();
-  }, [handleGetOltsData]);
+    CartService.findAll()
+      .then((result) => {
+        if (result.data && result.statusCode === 200) {
+          setCarts(result.data);
+          setFilteredCarts(result.data);
+        }
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    const filtered = carts.filter((cart) =>
+      cart.userId.toString().includes(search),
+    );
+    setFilteredCarts(filtered);
+  }, [search, carts]);
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-6">Network Logs</h1>
+    <div className="min-h-screen bg-muted/40 p-6">
+      <div className="max-w-6xl mx-auto space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+            <ShoppingCart className="w-8 h-8" />
+            Carrinhos de Compras
+          </h1>
 
-      {/* Filtros */}
-      <Card className="mb-6">
-        <CardContent className="flex flex-wrap items-end gap-4 p-4">
-          <div className="flex flex-col gap-1">
-            <label className="text-sm text-white">Search</label>
+          <div className="flex gap-2">
             <Input
-              placeholder="Device SN ..."
-              className="min-w-[200px]"
-              onChange={(e) =>
-                setSearchParams({ page: "1", search: e.target.value })
-              }
+              placeholder="Buscar por ID do usuário..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-64"
             />
+            <Button variant="outline" onClick={() => setSearch("")}>
+              Limpar
+            </Button>
           </div>
+        </div>
 
-          <div className="flex flex-col gap-1">
-            <Select
-              onValueChange={(value) => {
-                setSearchParams({ page: "1", search, oltType: value });
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione o tipo" />
-              </SelectTrigger>
-              <SelectContent className="bg-gray-900">
-                <SelectItem value="HUAWEI">HUAWEI</SelectItem>
-                <SelectItem value="ZTE">ZTE</SelectItem>
-                <SelectItem value="ZTE_STATE">ZTE_STATE</SelectItem>
-              </SelectContent>
-            </Select>
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin" />
           </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCarts.map((cart) => (
+              <motion.div
+                key={cart.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Card className="rounded-2xl shadow-md hover:shadow-xl transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex justify-between items-center">
+                      Carrinho #{cart.id}
+                      <Badge variant="secondary">
+                        {cart?.products?.length ?? 0} itens
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3 text-sm">
+                    <p>
+                      <span className="font-medium">Usuário:</span>{" "}
+                      {cart.userId}
+                    </p>
+                    <p>
+                      <span className="font-medium">Data:</span>{" "}
+                      {new Date(cart.date).toLocaleDateString()}
+                    </p>
 
-          <div className="flex flex-col gap-1">
-            <Select
-              onValueChange={(value) => {
-                setSearchParams({ page: "1", search, oltType, state: value });
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione o status" />
-              </SelectTrigger>
-              <SelectContent className="bg-gray-900">
-                <SelectItem value="ONLINE">online</SelectItem>
-                <SelectItem value="OFFLINE">offline</SelectItem>
-              </SelectContent>
-            </Select>
+                    {cart.products && (
+                      <div className="space-y-1">
+                        {cart.products.slice(0, 3).map((product, index) => (
+                          <div
+                            key={index}
+                            className="flex justify-between text-muted-foreground"
+                          >
+                            <span>Produto #{product.productId}</span>
+                            <span>x{product.quantity}</span>
+                          </div>
+                        ))}
+
+                        {cart.products.length > 3 && (
+                          <p className="text-xs text-muted-foreground">
+                            + {cart.products.length - 3} outros itens...
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
           </div>
-
-          <OltInfosModal
-            onCreateData={async () => {
-              await handleGetOltsData();
-            }}
-          />
-        </CardContent>
-      </Card>
-
-      {/* Tabela */}
-      <OltInfosTable data={oltInfos} />
-
-      {/* Paginação */}
-      <div className="flex justify-center py-6">
-        {metaPagination && metaPagination.total > metaPagination.perPage && (
-          <SimplePagination {...metaPagination} />
         )}
       </div>
     </div>
