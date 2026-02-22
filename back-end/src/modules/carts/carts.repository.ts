@@ -17,7 +17,11 @@ export class CartsRepository {
     return prisma.carts.findUnique({
       where: { id },
       include: {
-        products: true, // inclui itens do carrinho
+        products: {
+          include: {
+            product: true,
+          },
+        },
       },
     });
   }
@@ -25,7 +29,11 @@ export class CartsRepository {
   async getAll(): Promise<ICart[]> {
     return await prisma.carts.findMany({
       include: {
-        products: true,
+        products: {
+          include: {
+            product: true,
+          },
+        },
       },
       orderBy: {
         id: "asc",
