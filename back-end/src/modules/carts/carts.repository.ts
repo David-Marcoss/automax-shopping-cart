@@ -1,4 +1,4 @@
-import { prisma } from "src/database/prisma";
+import { prisma } from "../../database/prisma";
 import { ICart, ICreateCart, IUpdateCart } from "./carts.type";
 
 export class CartsRepository {

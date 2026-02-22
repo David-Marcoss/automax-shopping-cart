@@ -2,7 +2,7 @@ import { Router } from "express";
 import { CartsController } from ".";
 
 import { createOrUpdateValidation } from "./cartsValidation.midleware";
-import { paramIdValidation } from "src/shared/middleware/paramsIdValidation";
+import { paramIdValidation } from "../../shared/middleware/paramsIdValidation";
 
 const router = Router();
 

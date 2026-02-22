@@ -1,4 +1,4 @@
-import { prisma } from "src/database/prisma";
+import { prisma } from "../../database/prisma";
 import { IProduct, ICreateProduct, IUpdateProduct } from "./products.type";
 
 export class ProductsRepository {

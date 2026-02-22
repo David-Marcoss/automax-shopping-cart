@@ -30,7 +30,6 @@ const SyncDataBase = {
       for (const item of carts) {
         const { products: cartProducts, ...cartData } = item;
 
-        // 🔹 Verifica se cart já existe
         let cart = await CartsService.getById(cartData.id);
 
         if (!cart) {
@@ -61,7 +60,6 @@ const SyncDataBase = {
             });
           }
 
-          // 🔹 Verifica relação cart-product corretamente
           const existingCartProduct =
             await CartProductsService.getByCartIdAndProductId(
               cart!.id,
