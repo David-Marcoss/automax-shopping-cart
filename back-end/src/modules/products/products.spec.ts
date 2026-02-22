@@ -4,10 +4,6 @@ import { app } from "../../server";
 import { prisma } from "../../database/prisma";
 
 describe("Products - Integration", () => {
-  beforeEach(async () => {
-    await prisma.products.deleteMany();
-  });
-
   it("should create a product", async () => {
     const data = {
       title: "Test Product",
@@ -18,6 +14,8 @@ describe("Products - Integration", () => {
     };
 
     const response = await request(app).post("/products").send(data);
+
+    console.log(response.body);
 
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("id");

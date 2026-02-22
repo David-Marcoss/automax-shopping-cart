@@ -10,14 +10,14 @@ import {
 export class CartProductsService {
   constructor(private repository: CartProductsRepository) {}
 
-  async createOrUpdate(data: ICreateCartProduct): Promise<ICartProduct> {
-    // valida se o cart existe
-    await CartsService.getById(data.cartId);
+  async create(data: ICreateCartProduct): Promise<ICartProduct | null> {
+    if (data.id) {
+      const extistingCart = await this.getById(data.id);
 
-    // valida se o Product existe
-    await ProductsService.getById(data.productId);
+      if (extistingCart) return null;
+    }
 
-    return this.repository.upsert(data);
+    return this.repository.create(data);
   }
 
   async getById(id: number): Promise<ICartProduct | null> {
@@ -43,30 +43,6 @@ export class CartProductsService {
   }
 
   async update(data: IUpdateCartProduct): Promise<ICartProduct> {
-    if (!data.id) {
-      throw new Error("ID is required to update");
-    }
-
-    if (data.cartId) {
-      // valida se o cart existe
-      await CartsService.getById(data.cartId);
-    }
-
-    if (data.productId) {
-      // valida se o cart existe
-      await ProductsService.getById(data.productId);
-    }
-
-    const existing = await this.repository.getById(data.id);
-
-    if (!existing) {
-      throw new Error("Cart product not found");
-    }
-
-    if (data.quantity !== undefined && data.quantity <= 0) {
-      throw new Error("Quantity must be greater than zero");
-    }
-
     return this.repository.update(data);
   }
 

@@ -11,9 +11,15 @@ export class CartsController {
 
       const cart = await this.service.create(data);
 
+      if (!cart) {
+        return res.status(400).json({
+          message: `Cart with id ${data.id} already registered`,
+        });
+      }
+
       return res.status(201).json(cart);
     } catch (error: any) {
-      return res.status(400).json({
+      return res.status(500).json({
         message: error.message,
       });
     }

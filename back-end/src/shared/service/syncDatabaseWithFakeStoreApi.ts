@@ -43,7 +43,6 @@ const SyncDataBase = {
         for (const cartProduct of cartProducts) {
           const productId = cartProduct.productId;
 
-          // 🔹 Garante que produto exista
           let product = await ProductsService.getById(productId);
 
           if (!product) {
@@ -67,7 +66,7 @@ const SyncDataBase = {
             );
 
           if (!existingCartProduct) {
-            await CartProductsService.createOrUpdate({
+            await CartProductsService.create({
               cartId: cart!.id,
               productId: product.id,
               quantity: cartProduct.quantity,

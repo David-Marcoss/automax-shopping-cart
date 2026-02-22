@@ -6,18 +6,14 @@ import {
 } from "./cartProducts.type";
 
 export class CartProductsRepository {
-  async upsert(data: ICreateCartProduct): Promise<ICartProduct> {
-    if (data.id) {
-      return this.update(data);
-    }
-
-    return prisma.cartProducts.create({
+  async create(data: ICreateCartProduct): Promise<ICartProduct> {
+    return await prisma.cartProducts.create({
       data: data,
     });
   }
 
   async getById(id: number): Promise<ICartProduct | null> {
-    return prisma.cartProducts.findFirst({
+    return await prisma.cartProducts.findFirst({
       where: { id },
       include: {
         product: true,
@@ -29,7 +25,7 @@ export class CartProductsRepository {
     productId: number,
     cartId: number,
   ): Promise<ICartProduct | null> {
-    return prisma.cartProducts.findFirst({
+    return await prisma.cartProducts.findFirst({
       where: { productId, cartId },
       include: {
         product: true,
@@ -38,7 +34,7 @@ export class CartProductsRepository {
   }
 
   async getAll(): Promise<ICartProduct[]> {
-    return prisma.cartProducts.findMany({
+    return await prisma.cartProducts.findMany({
       include: {
         product: true,
       },
@@ -49,11 +45,7 @@ export class CartProductsRepository {
   }
 
   async update(data: IUpdateCartProduct): Promise<ICartProduct> {
-    if (!data.id) {
-      throw new Error("ID is required to update CartProduct");
-    }
-
-    return prisma.cartProducts.update({
+    return await prisma.cartProducts.update({
       where: { id: data.id },
       data: {
         quantity: data.quantity,

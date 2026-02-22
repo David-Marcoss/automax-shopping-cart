@@ -4,10 +4,6 @@ import { app } from "../../server";
 import { prisma } from "../../database/prisma";
 
 describe("Carts - Integration", () => {
-  beforeEach(async () => {
-    await prisma.carts.deleteMany();
-  });
-
   // -------------------------
   // CREATE
   // -------------------------
