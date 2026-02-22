@@ -1,9 +1,9 @@
 import * as yup from "yup";
 
 import { validation } from "../../shared/middleware/Validation";
-import { ICreateProduct } from "./products.type";
+import { ICreateProduct, IUpdateProduct } from "./products.type";
 
-const bodyValidation: yup.Schema<ICreateProduct> = yup.object().shape({
+const createBodyValidation: yup.Schema<ICreateProduct> = yup.object().shape({
   id: yup.number(),
   title: yup.string().required(),
   description: yup.string().required(),
@@ -13,6 +13,19 @@ const bodyValidation: yup.Schema<ICreateProduct> = yup.object().shape({
 });
 
 // midleware validação dados do body
-export const createOrUpdateValidation = validation({
-  body: bodyValidation,
+export const createValidation = validation({
+  body: createBodyValidation,
+});
+
+const updateBodyValidation: yup.Schema<IUpdateProduct> = yup.object().shape({
+  title: yup.string(),
+  description: yup.string(),
+  category: yup.string(),
+  image: yup.string(),
+  price: yup.number().min(1),
+});
+
+// midleware validação dados do body
+export const updateValidation = validation({
+  body: updateBodyValidation,
 });

@@ -1,18 +1,21 @@
 import { Router } from "express";
 import { ProductsController } from ".";
 
-import { createOrUpdateValidation } from "./productsValidation.midleware";
+import {
+  createValidation,
+  updateValidation,
+} from "./productsValidation.midleware";
 import { paramIdValidation } from "../../shared/middleware/paramsIdValidation";
 
 const router = Router();
 
-router.post("/", createOrUpdateValidation, ProductsController.create);
+router.post("/", createValidation, ProductsController.create);
 router.get("/", ProductsController.getAll);
 router.get("/:id", paramIdValidation, ProductsController.getById);
 router.put(
   "/:id",
   paramIdValidation,
-  createOrUpdateValidation,
+  updateValidation,
   ProductsController.update,
 );
 router.delete("/:id", paramIdValidation, ProductsController.delete);
